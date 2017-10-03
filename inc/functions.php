@@ -1,67 +1,89 @@
 <?php
+    
 
-function getRandCard(){
-    $suitnum = rand(0,3); 
-    getNumber($suitnum);
-}
-
-/*$cards=array();
+    //Lol the way I tried doing this didn't work so I did it the hard way
+    $cards = array("clubs"=> [1,2,3,4,5,6,7,8,9,10,11,12,13],
+    "diamonds" => [1,2,3,4,5,6,7,8,9,10,11,12,13],
+    "hearts" => [1,2,3,4,5,6,7,8,9,10,11,12,13], 
+    "spades" => [1,2,3,4,5,6,7,8,9,10,11,12,13]);
+    //A 2D array that works like $cards{"diamonds"][2]
+    
+   
+    function getCard(){
+        global $cards;
+        $randSuit = array_rand($cards); //Getting a random suit
+        $randNum = array_rand($cards[$randSuit]); //Geting a random card number for given suit
+        $actualCardNum = $cards[$randSuit][$randNum]; //Storing actual card number before deleting the index it was at
+        $isEmpty = 0;
         
-        $card1[3][12]; //suit,number
-        $card1["value"]=10;
-        $cards[]=$card1;
-        */
-        //
-function getNumber($randomValue){
-     switch ($randomValue){
-        case 0: $suit = "clubs";
+        array_splice($cards[$randSuit], $randNum, 1); //Deletes the index we used for card number
+    
+        if(sizeof($cards[$randSuit]) == 0){//Checks if card numbers array for given suit is empty
+            unset($cards[$randSuit]); //Deletes the suit from array if it has no numbers left
+        }
+       
+        if(sizeof($cards) == 0){
+            $isEmpty = 1;
+        }
+        return array($actualCardNum, $randNum, $randSuit, $isEmpty); //lol
+    }
+    
+$count=0;
+function displayCharacter($count){
+   
+     switch ($count){
+        case 0: $character = "spongebob";
                 break;
-        case 1: $suit = "diamonds";
+        case 1: $character = "patrick";
                 break;
-        case 2: $suit = "hearts";
+        case 2: $character = "squidward";
                 break;
-        case 3: $suit = "spades";
+        case 3: $character = "sandy";
                 break;
      }
-     
-    $cardnumber = rand(1, 13);
-    echo "<img id='card' src='/Labs/3/img/$suit/$cardnumber.png' alt='$suit' title='". ucfirst($suit) ."' width='70'>";
-
+    echo "<img id='player' src='img/spongebob/$character.jpg' title='". ucfirst($symbol) ."' width='70'/>";
   }
-  
-   
-  function displayPoints($randomValue1, $randomValue2, $randomValue3){
-    echo "<div id='output'>";
-    if($randomValue1 == $randomValue2 && $randomValue2==$randomValue3)
-    {
-        switch($randomValue1){
-            case 0:$totalPoints = 1000;
-                    echo "<h1>Jackpot!</h1>";
-                    break;
-            case 1: $totalPoints = 500;
-                    break;
-            case 2: $totalPoints = 250;
-                    break;
-            case 3: $totalPoints = 900;
+    
+    
+    function play(){//create & return array of cards per player 
+        $handTotals = array("SpongeBob" => 0, "Patrick" => 0, "Squidward" => 0, "Sandy" => 0);    
+        $differences = [];
+        $winner = "No winner";
+        echo "<div id='results'>";
+        foreach($handTotals as $player => $hand)
+        {
+            displayCharacter($count);
+            $count++;
+           //echo "<br>";
+            echo "Player: $player ";
+           echo '&nbsp';
+            $random = rand(4,6);
+            for($i = 0; $i < $random; $i++){
+                if($handTotals[$player] < 42){
+                    $returnArray = getCard();
+                    $cardNum = $returnArray[0];
+                    $suit = $returnArray[2];
+                    $handTotals[$player] += $cardNum;
+                    echo "<img src='img/$suit/$cardNum.png' alt='$suit'>";
+                }
+            }
+            $differences[$player] = 42-$handTotals[$player];
+            echo $handTotals[$player] ;
+            echo "</br>";
         }
+        echo "</div>";
         
-        echo "<h2> You won $totalPoints points!</h2>";
-    } else {
-        echo "<h3> Try Again! </h3>";
+        $min = 9999;
+        foreach($differences as $player => $difference){
+            if($difference >= 0){
+                if($difference < $min){
+                    $winner = $player;
+                    $min = $difference;
+                }
+            }
         }
-     echo "</div>";
-    
+        echo "<div id='winner'> <br> Winner is: $winner</div>";
+        
     }
-    
-  function play(){
-     for ($i=1;$i<4;$i++){
-        ${"randomValue" . $i } = rand(0,3);
-        displaySymbol(${"randomValue" . $i}, $i);
-        }
-        displayPoints($randomValue1, $randomValue2, $randomValue3);
-    }
-    
-    getRandCard(2);
-    
     
 ?>

@@ -1,0 +1,21 @@
+body{
+    
+    background-color:pink;
+}
+
+#main{
+    
+    margin:auto;
+    width: 55%;
+}
+
+h1{
+    text-align: center;
+}
+
+#winner{
+    font-size: 30px;
+    margin:auto;
+    width:40%;
+}
+

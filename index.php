@@ -4,17 +4,14 @@
     <title> SILVERJACK </title>
     <?php
         include 'inc/functions.php';
-        session_start();
-
-        $_SESSION["number"] = 2;
     ?>
 </head>
  
 <body>
-    
+    <h1>Super Fun Card Game</h1>
     <div id="main">
     <?php
-       
+        play();
     ?>
    
     
